@@ -85,7 +85,7 @@ public class AreaCheckServlet extends HttpServlet {
     private boolean validateX(String xString, boolean isButton) {
         try {
             if (isButton) {
-                int xValue = Integer.parseInt(xString);
+                double xValue = Double.parseDouble(xString);
                 return xValue > -3 && xValue < 3;
             } else {
                 Double.parseDouble(xString);

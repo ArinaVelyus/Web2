@@ -68,7 +68,17 @@ function sendCheckRequest(form, key) {
             alert("Некорректные данные")
             return false
         }
-        document.getElementById("output").innerHTML = data
+        data = JSON.parse(data);
+        let newRow = `
+           <tr class="row ${data["hit"] === "true"? "blue": "red"}">
+                <td>${data["x"]}</td>
+                <td>${data["y"]}</td>
+                <td>${data["r"]}</td>
+                <td>${data["cur_time"]}</td>
+                <td>${data["exe_time"]}</td>
+                <td class="hit-col">${data["hit"] === "true"? "YES": "NO"}</td>
+            </tr>`
+        $(newRow).insertAfter('#tableHeader')
         let hits = document.getElementsByClassName("hit-col")
         if (hits[1].innerHTML === "YES") {
             drawPoint(form.x, form.y, form.r, "#0d0ff3")

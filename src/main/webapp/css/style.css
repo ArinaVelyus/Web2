@@ -57,7 +57,7 @@ body{
 .content-photo{
     /* height: 100vh; */
     display: grid;
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 400px);
     align-items: center;
     justify-items: center;
 }

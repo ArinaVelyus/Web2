@@ -27,8 +27,13 @@ public class AreaCheckServlet extends HttpServlet {
         String rString = request.getParameter("r").replace(",", ".");
         boolean isButton = "button".equals(request.getParameter("key"));
         boolean valid = validateXYR(xString, yString, rString, isButton);
+        
+        Entry entry = null;
+        PrintWriter writer = response.getWriter();
 
         if (valid) {
+            if (xString.length() > 5) xString = xString.substring(0, 5);
+            if (yString.length() > 5) yString = yString.substring(0, 5);
             double x = Double.parseDouble(xString);
             double y = Double.parseDouble(yString);
             double r = Double.parseDouble(rString);
@@ -37,18 +42,36 @@ public class AreaCheckServlet extends HttpServlet {
             String currentTime = new SimpleDateFormat("d MMMM y HH:mm:ss").format(new Date());
             float resultTime = (System.nanoTime() - startTime) / 1000000000f;
             String executionTime = String.format("%f", resultTime);
-
-            entries.getEntries().add(0, new Entry(x, y, r, currentTime, executionTime, isHit));
+            
+            entry = new Entry(x, y, r, currentTime, executionTime, isHit);
+            entries.getEntries().add(0, entry);
             request.getSession().setAttribute("entries", entries);
-        } else {
-            PrintWriter writer = response.getWriter();
-            writer.write("failure");
-            writer.close();
-        }
 
-        PrintWriter writer = response.getWriter();
-        writer.println(generateTable(entries));
+
+            writer.println(generateJson(entry));
+        } else {
+            writer.write("failure");
+        }
         writer.close();
+    }
+    static private final String successFormat = "{" +
+            "\"x\": \"%s\"," +
+            "\"y\": \"%s\"," +
+            "\"r\": \"%s\"," +
+            "\"cur_time\": \"%s\"," +
+            "\"exe_time\": \"%s\"," +
+            "\"hit\": \"%s\"" +
+            "}";
+    private String generateJson(Entry element){
+        return String.format(
+                successFormat,
+                element.getX(),
+                element.getY(),
+                element.getR(),
+                element.getCurrentTime(),
+                element.getExecutionTime(),
+                element.isHit()
+        );
     }
 
     private String generateTable(EntriesBean entries) {

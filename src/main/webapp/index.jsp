@@ -57,7 +57,7 @@
             <div id="output">
                 <div class="caption">Результат</div>
                 <table id="result-table">
-                    <tr class="row">
+                    <tr class="row" id="tableHeader">
                         <th class="coords-col">X</th>
                         <th class="coords-col">Y</th>
                         <th class="coords-col">R</th>
